@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<ItemGroup>
+		<PackageReference Include="Stl.Fusion" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\SmartModel.MetaModel\SmartModel.MetaModel.csproj" />
+	</ItemGroup>
+</Project>

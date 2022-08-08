@@ -1,0 +1,13 @@
+﻿MASA.Auth可以生成的代码
+
+Dto
+DomainModel
+Repository接口定义
+EntityTypeConfiguration,EF表配置
+Repositories实现
+Command...
+Queries...
+
+属性问题:
+
+ThirdPartyUserModel的IdentityProvider属性，代码里用的是DetailDto

@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<ItemGroup>
+		<PackageReference Include="BootstrapBlazor"/>
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SmartModel.Interface\SmartModel.Interface.csproj" />
+  </ItemGroup>
+</Project>
