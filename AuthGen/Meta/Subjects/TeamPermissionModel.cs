@@ -1,11 +1,4 @@
-﻿using SmartModel;
-using static AuthGen.MASAAuthTypeNameConst;
-using static AuthGen.MASAAuthModuleNameConst;
-using static AuthGen.MASAAuthEnumTypeNameConst;
-using static SmartModel.PropertyNameConst;
-using static SmartModel.PropertyDef;
-
-namespace AuthGen
+﻿namespace AuthGen
 {
 
     public class TeamPermissionModel : MetaModelDef
@@ -15,9 +8,12 @@ namespace AuthGen
             SetName(TeamPermission)
                 .SetModuleName(Subjects)
                 .SetBaseClassName(SubjectPermissionRelation)
-                .AddProperty(Enum(TeamMemberTypes, TeamMemberType))
-                .AddProperty(Guid(TeamId))
-                .AddProperty(NewProperty(Team, Team).SetNullable_NotNull())
+                .AddProperty(Enum(TeamMemberTypes, TeamMemberType)
+                    .ExistIn(DomainModel, Dto))
+                .AddProperty(Guid(TeamId)
+                     .ExistIn(DomainModel))
+                .AddProperty(NewProperty(Team, Team).SetNullable_NotNull()
+                     .ExistIn(DomainModel))
                 ;
         }
     }

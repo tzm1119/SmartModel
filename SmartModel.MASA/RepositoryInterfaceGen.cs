@@ -65,7 +65,13 @@ namespace SmartModel
                 NamespaceContainter(() =>
                 {
                     var repoName = Model.RepositoryName;
-                    WriteLine($"public {partial} class {repoName} : Repository<AuthDbContext, {ModelName}, {Model.TKey}>, {Model.RepositoryInterfaceName}");
+                    var tKey = "";
+                    if (!string.IsNullOrEmpty(Model.TKey))
+                    {
+                        tKey = $",{Model.TKey}";
+                    }
+
+                    WriteLine($"public {partial} class {repoName} : Repository<AuthDbContext, {ModelName} {tKey}>, {Model.RepositoryInterfaceName}");
                     WriteLine("{");
                     WriteLine($"public {repoName}(AuthDbContext context, IUnitOfWork unitOfWork) : base(context, unitOfWork)");
                     WriteLine("{");

@@ -1,13 +1,5 @@
-﻿using SmartModel;
-using static AuthGen.MASAAuthTypeNameConst;
-using static AuthGen.MASAAuthModuleNameConst;
-using static AuthGen.MASAAuthEnumTypeNameConst;
-using static SmartModel.PropertyNameConst;
-using static SmartModel.PropertyDef;
-
-namespace AuthGen
+﻿namespace AuthGen
 {
-
     public class LdapIdpModel : MetaModelDef
     {
         public LdapIdpModel()
@@ -17,14 +9,22 @@ namespace AuthGen
                 .SetBaseClassName(IdentityProvider)
                 .SetIRepository_Entity_Guid()
                 .SetDoNotGenDto()
-                .AddProperty(String(ServerAddress))
-                .AddProperty(Int(ServerPort))
-                .AddProperty(String(BaseDn))
-                .AddProperty(Bool(IsSSL))
-                .AddProperty(String(UserSearchBaseDn))
-                .AddProperty(String(GroupSearchBaseDn))
-                .AddProperty(String(RootUserDn))
-                .AddProperty(String(RootUserPassword))
+                .AddProperty(String(ServerAddress)
+                    .ExistIn(DomainModel))
+                .AddProperty(Int(ServerPort)
+                     .ExistIn(DomainModel))
+                .AddProperty(String(BaseDn)
+                     .ExistIn(DomainModel))
+                .AddProperty(Bool(IsSSL)
+                     .ExistIn(DomainModel))
+                .AddProperty(String(UserSearchBaseDn)
+                     .ExistIn(DomainModel))
+                .AddProperty(String(GroupSearchBaseDn)
+                     .ExistIn(DomainModel))
+                .AddProperty(String(RootUserDn)
+                     .ExistIn(DomainModel))
+                .AddProperty(String(RootUserPassword)
+                     .ExistIn(DomainModel))
                 .EntityTypeConfiguration
                 .Property(new EFPropertyConfig(BaseDn,maxLen:255))
                 .Property(new EFPropertyConfig(UserSearchBaseDn, maxLen:255))

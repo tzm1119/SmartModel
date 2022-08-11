@@ -283,9 +283,9 @@ namespace SmartModel
             this.IsUnique = isUnique;
             if (!string.IsNullOrEmpty(hasFilter))
             {
-                this.HasFilter = $".HasFilter(\"{hasFilter}\")" ;
+                this.HasFilter = $".HasFilter(\"{hasFilter}\")";
             }
-            
+
             this.EFIndexType = fIndexType;
         }
         /// <summary>
@@ -373,8 +373,6 @@ namespace SmartModel
         }
     }
 
-
-
     public class EFPropertyConfig
     {
         public EFPropertyConfig(string name, string enumType)
@@ -441,6 +439,18 @@ namespace SmartModel
         public MetaModelDef SetBaseClass_AggregateRoot_Guid()
         {
             this.BaseClassName = "AggregateRoot<Guid>";
+            TKey = "Guid";
+            return this;
+        }
+
+        public MetaModelDef SetTKey_Int()
+        {
+            TKey = "int";
+            return this;
+        }
+
+        public MetaModelDef SetTKey_Guid()
+        {
             TKey = "Guid";
             return this;
         }
@@ -551,12 +561,153 @@ namespace SmartModel
 
         #region CRUD功能支持
 
-        public bool SupportGet { get; set; }
-        public bool SupportDetail { get; set; }
-        public bool SupportAdd { get; set; }
-        public bool SupportRemove { get; set; }
-        public bool SupportUpdate { get; set; }
-        public bool SupportUpsert { get; set; }
+        /// <summary>
+        /// 不允许重复的属性名，一般情况下，如果Name不允许重复，则此属性设置为Name即可
+        /// 在Add和Upsert时，会使用到此属性
+        /// </summary>
+        public string KeyProperty { get; set; } = "";
+
+        /// <summary>
+        /// 至少支持一个服务,对于Caller，至少有一个服务，则生成对应的Caller
+        /// </summary>
+        /// <returns></returns>
+        public bool AtLeastSupportOne()
+        {
+            return IsSupportGet || IsSupportDetail
+                || IsSupportSelect || IsSupportAdd || IsSupportCopy
+                || IsSupportRemove || IsSupportUpdate || IsSupportUpsert;
+        }
+
+        /// <summary>
+        /// 生成CommandHandler时，使用判断 此对象是否需要生成CommandHandler
+        /// </summary>
+        /// <returns></returns>
+        public bool AtLeastCommandHandler()
+        {
+            return IsSupportAdd || IsSupportCopy
+                || IsSupportRemove || IsSupportUpdate || IsSupportUpsert;
+        }
+
+
+        /// <summary>
+        /// 至少存在一个 领域事件
+        /// </summary>
+        /// <returns></returns>
+        public bool AtLeastOneDomainEvent()
+        {
+            return AddIsDomainEvent || UpdateIsDomainEvent
+              || RemoveIsDomainEvent;
+        }
+
+        public MetaModelDef SupportGet()
+        {
+            IsSupportGet = true;
+            return this;
+        }
+
+        public bool IsSupportGet { get; set; }
+        public MetaModelDef SupportDetail()
+        {
+            IsSupportDetail = true;
+            return this;
+        }
+        public bool IsSupportDetail { get; set; }
+
+        public MetaModelDef SupportSelect(string customSelectDtoBaseClass = "")
+        {
+            IsSupportSelect = true;
+            CustomSelectDtoBaseClass = customSelectDtoBaseClass;
+            return this;
+        }
+
+        /// <summary>
+        /// 自定义 SelectDto 基类，如 AutoCompleteDocument<Guid>
+        /// </summary>
+        public string CustomSelectDtoBaseClass { get; set; } = "";
+
+        public bool IsSupportSelect { get; set; }
+
+        public bool IsSupportAdd { get; set; }
+        /// <summary>
+        /// 添加操作触发领域事件
+        /// </summary>
+        public bool AddIsDomainEvent { get; set; }
+        public MetaModelDef SupportAdd(bool addIsDomainEvent = false)
+        {
+            IsSupportAdd = true;
+            AddIsDomainEvent = addIsDomainEvent;
+            return this;
+        }
+
+        public bool IsCopyDtoInheritUpsertDto { get; set; }
+
+        public MetaModelDef Set_CopyDtoInheritUpsertDto()
+        {
+            IsCopyDtoInheritUpsertDto = true;
+            return this;
+        }
+
+        public bool IsSupportCopy { get; set; }
+        public MetaModelDef SupportCopy()
+        {
+            IsSupportCopy = true;
+            return this;
+        }
+
+        public bool RemoveIsDomainEvent { get; set; }
+        public MetaModelDef SupportRemove(bool removeIsDomainEvent = false)
+        {
+            IsSupportRemove = true;
+            RemoveIsDomainEvent = removeIsDomainEvent;
+            return this;
+        }
+        public bool IsSupportRemove { get; set; }
+        public MetaModelDef SupportUpdate(bool updateIsDomainEvent = false)
+        {
+            IsSupportUpdate = true;
+            UpdateIsDomainEvent = updateIsDomainEvent;
+            return this;
+        }
+        public bool IsSupportUpdate { get; set; }
+
+      
+        public bool IsPartialUpdate { get; set; }
+        /// <summary>
+        /// 当前对象是否是局部更新对象,如StaffPassword，只生成 Dto和Command
+        /// 此对象 是用来局部更新Staff
+        /// </summary>
+        public MetaModelDef SupportPartialUpdate(string partialUpdateTargetClassName)
+        {
+            IsPartialUpdate = true;
+            PartialUpdateTargetClassName = partialUpdateTargetClassName;
+            // 将此对象注册到全局中心，这样代码生成器才能访问到
+            PartailUpdateCenter.Regist(this);
+            return this;
+        }
+
+        public bool PartialUpdateToThis(string thisType) => thisType == PartialUpdateTargetClassName;
+
+
+        /// <summary>
+        /// 局部更新的目标对象 类型名，如Staff
+        /// </summary>
+        public string PartialUpdateTargetClassName { get; set; } = "";
+
+
+        public bool UpdateIsDomainEvent { get; set; }
+        public MetaModelDef SupportUpsert()
+        {
+            IsSupportUpsert = true;
+            return this;
+        }
+        public bool IsSupportUpsert { get; set; }
+
+        public string AddCommandName => $"Add{ModelName}Command";
+        public string CopyCommandName => $"Copy{ModelName}Command";
+        public string RemoveCommandName => $"Remove{ModelName}Command";
+        public string UpdateCommandName => $"Update{ModelName}Command";
+        public string UpserCommandName => $"Upser{ModelName}Command";
+
 
         /// <summary>
         ///  需要生成对应的SelectDto，如 DepartmentSelectDto
@@ -582,6 +733,83 @@ namespace SmartModel
                 return _EntityTypeConfiguration;
             }
         }
+        #endregion
+
+        #region Dto
+
+        public string AddDtoName => $"Add{ModelName}Dto";
+        public string CopyDtoName => $"Copy{ModelName}Dto";
+        public string DetailDtoName => $"{ModelName}DetailDto";
+        public string RemoveDtoName => $"Remove{ModelName}Dto";
+        public string UpdateDtoName => $"Update{ModelName}Dto";
+
+        public string UpsertDtoName => $"Upsert{ModelName}Dto";
+        public string GetDtoName => $"Get{ModelName}Dto";
+
+        public string SelectQueryDtoName => $"Query{ModelName}SelectDto";
+
+        public string DetailQueryDtoName => $"Query{ModelName}DetailDto";
+        public string SelectDtoName => $"{ModelName}SelectDto";
+
+
+        public bool IsDetialDtoInheritDto { get; set; }
+
+        /// <summary>
+        /// DetialDto是否继承自 主Dto
+        /// </summary>
+        public MetaModelDef SetDetialDtoInheritDto()
+        {
+            IsDetialDtoInheritDto = true;
+            return this;
+        }
+
+
+        public bool IsUpdateDtoInheritAddDto { get; set; }
+
+        public bool IsUpdateDtoInheritDetailDto { get; set; }
+
+        /// <summary>
+        /// UpdateDto是否继承自AddDto
+        /// </summary>
+        public MetaModelDef Set_UpdateDtoInheritAddDto()
+        {
+            IsUpdateDtoInheritAddDto = true;
+            return this;
+        }
+
+        /// <summary>
+        /// UpdateDto是否继承自DetailDto
+        /// </summary>
+        public MetaModelDef Set_UpdateDtoInheritDetailDto()
+        {
+            IsUpdateDtoInheritDetailDto = true;
+            return this;
+        }
+
+        /// <summary>
+        /// 自定义DetailDto的基类
+        /// </summary>
+        public string CustomDetailDtoBaseClass { get; set; } = "";
+        public MetaModelDef Set_CustomDetailDtoBaseClass(string name)
+        {
+            CustomDetailDtoBaseClass = name;
+            return this;
+        }
+
+        #endregion
+
+        #region Query
+
+        public string ModelQueryName => $"{ModelName}Query";
+        public string ModelDetailQueryName => $"{ModelName}DetailQuery";
+        public string ModelSelectQueryName => $"{ModelName}SelectQuery";
+        #endregion
+
+        #region Doamin Event
+
+        public string AddDomainEvent => $"Add{ModelName}DomainEvent";
+        public string RemoveDomainEvent => $"Remove{ModelName}DomainEvent";
+        public string UpdateDomainEvent => $"Update{ModelName}DomainEvent";
         #endregion
 
         #region 文件名
@@ -636,6 +864,21 @@ namespace SmartModel
         {
             return this.PropertyDefs.Where(p => p.ShowInEditForm);
         }
+
+        public IEnumerable<PropertyDef> GetPropertyDefs(PropertyExistType propertyExistType)
+        {
+            return this.PropertyDefs.Where(p => p.CheckExistIn(propertyExistType));
+        }
+
+        public IEnumerable<PropertyDef> GetIdProperty()
+        {
+            return this.PropertyDefs.Where(p => p.PropertyName == Id);
+        }
+
+        //private bool TypeInclude(PropertyExistType t1, PropertyExistType t2)
+        //{
+        //    return (t1 & t2) != 0;
+        //}
         #endregion
 
         #region 基础属性
@@ -693,6 +936,7 @@ namespace SmartModel
 
         public List<PropertyDef> PropertyDefs { get; set; } = new();
 
+
         public ModelScope Scope { get; set; }
 
         #endregion
@@ -713,7 +957,6 @@ namespace SmartModel
         /// </summary>
         public bool DoNotGenFrontTableAndEditForm { get; set; }
         #endregion
-
     }
 
     /// <summary>

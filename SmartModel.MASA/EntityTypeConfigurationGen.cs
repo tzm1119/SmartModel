@@ -24,7 +24,7 @@ namespace SmartModel
 
                 NamespaceContainter(() =>
                 {
-                    WriteLine($"public class {ModelName}EntityTypeConfiguration : IEntityTypeConfiguration<{ModelName}>");
+                    WriteLine($"public {partial} class {ModelName}EntityTypeConfiguration : IEntityTypeConfiguration<{ModelName}>");
                     WriteLine("{");
                     WriteLine($" public void Configure(EntityTypeBuilder<{ModelName}> builder)");
                     WriteLine("{");

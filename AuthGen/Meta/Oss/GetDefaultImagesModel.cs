@@ -1,24 +1,17 @@
-﻿using SmartModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static AuthGen.MASAAuthTypeNameConst;
-using static AuthGen.MASAAuthModuleNameConst;
-using static AuthGen.MASAAuthEnumTypeNameConst;
-using static SmartModel.PropertyNameConst;
-using static SmartModel.PropertyDef;
-
-namespace AuthGen
+﻿namespace AuthGen
 {
-    public class GetDefaultImagesModel : MetaModelDef
+    public class DefaultImagesModel : MetaModelDef
     {
-        public GetDefaultImagesModel()
+        public DefaultImagesModel()
         {
-            SetName(AddPosition)
-                .AddProperty(Enum(GenderTypes, Gender))
-                .AddProperty(String(Url))
+            SetName(DefaultImages)
+                .SetDoNotGenDomainModel()
+                .SetModuleName(Oss)
+                .AddProperty(Enum(GenderTypes, Gender)
+                      .ExistIn(GetDto))
+                .AddProperty(String(Url)
+                      .ExistIn(GetDto))
+                .SupportGet()
             ;
         }
     }

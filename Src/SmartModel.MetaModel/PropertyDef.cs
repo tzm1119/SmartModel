@@ -19,12 +19,22 @@ namespace SmartModel
     /// </summary>
     public enum PropertyExistType
     {
+        None,
         /// <summary>
         /// 此属性仅出现在Dto中
         /// </summary>
-        Dto,
-        DomainModel,
-        BothDto_DomainModel
+        Dto = 1,
+        DetailDto = 2,
+        SelectDto = 4,
+        AddDto = 8,
+        GetDto = 16,
+        RemoveDto = 32,
+        UpdateDto = 64,
+        DomainModel = 128,
+        UpsertDto = 256,
+        CopyDto=512,
+        SelectQueryDto=1024,
+        DetailQueryDto=2048,
     }
 
     public static class StringExt
@@ -117,13 +127,13 @@ namespace SmartModel
             }.SetEditor(PropertyEditorType.TextInput);
         }
 
-        public static PropertyDef String(string name)
+        public static PropertyDef String(string name,string defalutValue="")
         {
             return new PropertyDef
             {
                 PropertyName = name,
                 CSharpType = "string",
-                DefaultValue = "\"\"",
+                DefaultValue = $"\"{defalutValue}\"",
             }.SetEditor(PropertyEditorType.TextInput);
         }
 
@@ -143,6 +153,15 @@ namespace SmartModel
             //return $"_{PropertyName.ToCameCase()}";
         }
 
+        /// <summary>
+        /// List中的 泛型类型为自定义类型时，使用此方法。如果泛型为c#基础类型
+        /// 比如List<int>,List<string>时，请直接使用ListString或ListInt，
+        /// 而不要使此方法，因为此方法 会设置 DtoCsharpType = List<{innerType}Dto>
+        /// 
+        /// </summary>
+        /// <param name="innerType"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static PropertyDef List(string innerType, string name)
         {
             return new PropertyDef
@@ -156,10 +175,49 @@ namespace SmartModel
             }.SetEditor(PropertyEditorType.Switch);
         }
 
+        /// <summary>
+        /// List<CheckItemDto<string>>
+        /// </summary>
+        /// <param name="innerType"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static PropertyDef ListCheckItem_String(string name)
+        {
+            var p = List("CheckItemDto<string>", name);
+            p.DtoCsharpType = "List<CheckItemDto<string>>";
+            return p;
+        }
+
+        /// <summary>
+        /// List<SelectItemDto<string>>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static PropertyDef ListSelectItem_String(string name)
+        {
+            var p = List("SelectItemDto<string>", name);
+            p.DtoCsharpType = "List<SelectItemDto<string>>";
+            return p;
+        }
+
         public static PropertyDef ListString(string name)
         {
             var p = List("string", name);
             p.DtoCsharpType = "List<string>";
+            return p;
+        }
+
+        public static PropertyDef ListInt(string name)
+        {
+            var p = List("int", name);
+            p.DtoCsharpType = "List<int>";
+            return p;
+        }
+
+        public static PropertyDef ListGuid(string name)
+        {
+            var p = List("Guid", name);
+            p.DtoCsharpType = "List<Guid>";
             return p;
         }
 
@@ -172,7 +230,9 @@ namespace SmartModel
                 DefaultValue = GetPropertyFieldName(name),
                 GetSetType = GetSetType.Get,
                 FieldType = $"List<{innerType}>",
+                DtoCsharpType = $"List<{innerType}Dto>",
                 ListInnerType = innerType,
+                DtoDefaultValue = DefaultValue_CtorNew,
                 FieldDefaultValue = DefaultValue_CtorNew,
             }.SetEditor(PropertyEditorType.Switch);
         }
@@ -186,11 +246,22 @@ namespace SmartModel
                 DefaultValue = GetPropertyFieldName(name),
                 GetSetType = GetSetType.Get,
                 FieldType = $"List<{innerType}>",
+                DtoCsharpType = $"List<{innerType}Dto>",
                 ListInnerType = innerType,
+                DtoDefaultValue= DefaultValue_CtorNew,
                 FieldDefaultValue = DefaultValue_CtorNew,
             }.SetEditor(PropertyEditorType.Switch);
         }
 
+        public PropertyDef AddAttribute(string attr)
+        {
+            Attributes.Add(attr);
+            return this;
+        }
+        /// <summary>
+        /// 当前属性的 Attribute
+        /// </summary>
+        public HashSet<string> Attributes { get; set; } = new();
         /// <summary>
         /// 如果当前属性是List和IReadOnlyList集合类型，则此属性表示 集合中的泛型
         /// 对象的类型
@@ -231,7 +302,10 @@ namespace SmartModel
 
         public static PropertyDef Dictionary_String_String_Properties()
         {
-            return NewProperty("Dictionary<string, string>", "Properties", DefaultValue_CtorNew);
+            var dicType = "Dictionary<string, string>";
+            var p= NewProperty(dicType, "Properties", DefaultValue_CtorNew);
+            p.DtoCsharpType = dicType;
+            return p;
         }
 
         public static PropertyDef DateTime(string name, bool nullable = false)
@@ -246,12 +320,16 @@ namespace SmartModel
 
         public static PropertyDef DateOnly(string name)
         {
-            return new PropertyDef
+            var p= new PropertyDef
             {
                 PropertyName = name,
                 CSharpType = "DateOnly",
                 DefaultValue = "DateOnly.FromDateTime(DateTime.Now)"
             }.SetEditor(PropertyEditorType.DateOnlyPicker);
+            
+            // 默认都加上这个特性
+            p.AddAttribute("[JsonConverter(typeof(DateOnlyNullableJsonConverter))]");
+            return p;
         }
 
         public static PropertyDef Enum(string enumType, string name, string defaultValue = "")
@@ -261,10 +339,9 @@ namespace SmartModel
                 PropertyName = name,
                 CSharpType = enumType,
                 DefaultValue = defaultValue,
-                IsCustomEnumType = true
+                IsCustomEnumType = true,
             }.SetEditor(PropertyEditorType.SingleSelect);
         }
-
 
 
         public static PropertyDef Int(string name, int defaultValue = 0)
@@ -434,6 +511,15 @@ namespace SmartModel
             return this;
         }
 
+        /// <summary>
+        /// 当前属性需要 添加new 隐藏父类的属性
+        /// </summary>
+        public bool New { get; set; }
+        public PropertyDef IsNew()
+        {
+            New = true;
+            return this;
+        }
 
         public GetSetType GetSetType { get; set; } = GetSetType.Get_PrivateSet;
 
@@ -457,11 +543,39 @@ namespace SmartModel
         /// <summary>
         /// 此属性仅在Dto中出现，在Domin Model中没有此属性
         /// </summary>
-        public PropertyExistType PropertyExistType { get; set; } = PropertyExistType.BothDto_DomainModel;
+        public PropertyExistType PropertyExistType { get; set; } = PropertyExistType.None;
         public PropertyDef IsOnlyDto()
         {
             PropertyExistType = PropertyExistType.Dto;
             return this;
+        }
+
+        public PropertyDef IsOnlyGetDto()
+        {
+            PropertyExistType = PropertyExistType.GetDto;
+            return this;
+        }
+
+        /// <summary>
+        /// 当前属性存在于多种Dto或Domain model中
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        public PropertyDef ExistIn(params PropertyExistType[] types)
+        {
+            PropertyExistType = types.Aggregate((t, seed) => t | seed);
+            return this;
+        }
+
+        /// <summary>
+        /// 检查当前属性是否出现在 指定类型的对象上
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public bool CheckExistIn(PropertyExistType type)
+        {
+            return (PropertyExistType & type) != 0;
+
         }
 
         public PropertyDef IsOnlyDomainModel()
@@ -582,10 +696,14 @@ namespace SmartModel
         /// </summary>
         public string CSharpType { get; set; } = "";
         /// <summary>
-        /// 默认值
+        /// 默认值,领域对象的默认值
         /// </summary>
         public string DefaultValue { get; set; } = "";
 
+        /// <summary>
+        /// 默认值,Dto对象的默认值
+        /// </summary>
+        public string DtoDefaultValue { get; set; } = "";
 
         public Func<string, string> CloneFunc = BasicClone;
 

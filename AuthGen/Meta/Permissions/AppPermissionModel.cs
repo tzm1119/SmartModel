@@ -1,16 +1,4 @@
-﻿using SmartModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static AuthGen.MASAAuthTypeNameConst;
-using static AuthGen.MASAAuthModuleNameConst;
-using static AuthGen.MASAAuthEnumTypeNameConst;
-using static SmartModel.PropertyNameConst;
-using static SmartModel.PropertyDef;
-
-namespace AuthGen
+﻿namespace AuthGen
 {
     public class AppPermissionModel : MetaModelDef
     {
@@ -18,11 +6,16 @@ namespace AuthGen
         {
             SetName(AppPermission)
                .SetModuleName(M_Permissions)
-               .AddProperty(String(AppId))
-               .AddProperty(Enum(PermissionTypes,_Type))
-               .AddProperty(Guid(PermissionId))
-               .AddProperty(String(PermissionName))
-               .AddProperty(List(AppPermission, Children))
+               .AddProperty(String(AppId)
+                   .ExistIn(Dto))
+               .AddProperty(Enum(PermissionTypes,_Type)
+                 .ExistIn(Dto))
+               .AddProperty(Guid(PermissionId)
+                 .ExistIn(Dto))
+               .AddProperty(String(PermissionName)
+                 .ExistIn(Dto))
+               .AddProperty(List(AppPermission, Children)
+                 .ExistIn(Dto))
             ;
         }
     }

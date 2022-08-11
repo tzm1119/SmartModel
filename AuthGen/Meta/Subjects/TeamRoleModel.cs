@@ -1,12 +1,4 @@
-﻿using SmartModel;
-using static AuthGen.MASAAuthTypeNameConst;
-using static AuthGen.MASAAuthModuleNameConst;
-using static AuthGen.MASAAuthEnumTypeNameConst;
-using static SmartModel.PropertyNameConst;
-using static SmartModel.PropertyDef;
-
-
-namespace AuthGen
+﻿namespace AuthGen
 {
     public class TeamRoleModel : MetaModelDef
     {
@@ -16,11 +8,26 @@ namespace AuthGen
                 .SetModuleName(Subjects)
                 .SetBaseClass_FullEntity_Guid_Guid()
                 .SetDoNotGenDto()
-                .AddProperty(Enum(TeamMemberTypes, TeamMemberType))
-                .AddProperty(Guid(TeamId))
-                .AddProperty(Guid(RoleId))
-                .AddProperty(NewProperty(Team, Team).SetNullable_NotNull())
-                .AddProperty(NewProperty(Role, Role).SetNullable_NotNull())
+                 .AddProperty(Guid(Id)
+                    .ExistIn(SelectDto))
+                .AddProperty(Enum(TeamMemberTypes, TeamMemberType)
+                     .ExistIn(DomainModel))
+                .AddProperty(String_Name()
+                      .ExistIn(SelectDto))
+                 .AddProperty(String(Avatar)
+                      .ExistIn(SelectDto))
+                    .AddProperty(List(RoleSelect, Roles)
+                      .ExistIn(SelectDto))
+                .AddProperty(Guid(TeamId)
+                      .ExistIn(DomainModel))
+                .AddProperty(Guid(RoleId)
+                     .ExistIn(DomainModel))
+                .AddProperty(NewProperty(Team, Team).SetNullable_NotNull()
+                     .ExistIn(DomainModel))
+                .AddProperty(NewProperty(Role, Role).SetNullable_NotNull()
+                     .ExistIn(DomainModel))
+                .SupportSelect()
+                
                 .EntityTypeConfiguration
                 .HasKey(Id)
                 .Return();

@@ -1,13 +1,28 @@
 ﻿MASA.Auth可以生成的代码
 
-Dto
+Dto,AddDto,SelectDto,RemoveDto,UpdateDto,UpsertDto
 DomainModel
 Repository接口定义
 EntityTypeConfiguration,EF表配置
 Repositories实现
-Command...
-Queries...
+Command
+Queries
+CommandHandler
+DoaminEvent
+DomainService
+RestService
+Caller
 
 属性问题:
 
 ThirdPartyUserModel的IdentityProvider属性，代码里用的是DetailDto
+
+AppNavigationTag的对应的Detial命名为 AppTagDetailDto
+
+AddStaffDto中的List<Guid> Teams 改名为 TeamIds
+
+UpdateStaffDto中有Landline属性，但Staff中没有这个属性，在User中才有Landline属性
+
+在Calller中，由于GetSelectAsync有多种不同输入参数的调用，目前只能生成无参数调用，有参数调用，还得继续总结规律
+
+对于User的Gender属性，有的Dto是 Gender 有的是 GenderType，使用代码生成，就可以统一名称

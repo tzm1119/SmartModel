@@ -4,6 +4,7 @@ using static AuthGen.MASAAuthModuleNameConst;
 using static AuthGen.MASAAuthEnumTypeNameConst;
 using static SmartModel.PropertyNameConst;
 using static SmartModel.PropertyDef;
+using static SmartModel.PropertyExistType;
 
 namespace AuthGen
 {
@@ -14,11 +15,16 @@ namespace AuthGen
             SetName(CustomLoginThirdPartyIdp)
                 .SetModuleName(Sso)
                 .SetBaseClass_Entity_Int()
-                .AddProperty(Guid(Id).IsOnlyDto())
-                .AddProperty(Guid(ThirdPartyIdpId).IsOnlyDomainModel())
-                .AddProperty(NewProperty(ThirdPartyIdp, ThirdPartyIdp).SetNullable_NotNull().IsOnlyDomainModel())
-                .AddProperty(Int(CustomLoginId).IsOnlyDomainModel())
-                .AddProperty(Int(Sort))
+                .AddProperty(Guid(Id)
+                    .ExistIn(Dto))
+                .AddProperty(Guid(ThirdPartyIdpId)
+                     .ExistIn(DomainModel))
+                .AddProperty(NewProperty(ThirdPartyIdp, ThirdPartyIdp).SetNullable_NotNull()
+                     .ExistIn(DomainModel))
+                .AddProperty(Int(CustomLoginId)
+                     .ExistIn(DomainModel))
+                .AddProperty(Int(Sort)
+                    .ExistIn(DomainModel,Dto))
             ;
         }
     }
