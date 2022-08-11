@@ -1,10 +1,4 @@
-﻿using SmartModel;
-using static AuthGen.MASAAuthTypeNameConst;
-using static AuthGen.MASAAuthEnumTypeNameConst;
-using static SmartModel.PropertyNameConst;
-using static SmartModel.PropertyDef;
-
-namespace AuthGen
+﻿namespace AuthGen
 {
     public class UserSystemBusinessDataModel : MetaModelDef
     {
@@ -14,13 +8,16 @@ namespace AuthGen
                .SetModuleName(Subjects)
                .SetBaseClass_FullAggregateRoot_Guid_Guid()
                .SetIRepository_Entity()
-               .SetDoNotGenDto()
-               .AddProperty(Guid(UserId))
-               .AddProperty(String(Data))
-               .AddProperty(String(SystemId))
+               .AddProperty(Guid(UserId)
+                    .ExistIn(DomainModel,UpsertDto))
+               .AddProperty(String(Data)
+                 .ExistIn(DomainModel, UpsertDto))
+               .AddProperty(String(SystemId)
+                 .ExistIn(DomainModel, UpsertDto))
+               . SupportUpsert()
                 .EntityTypeConfiguration
                 .HasKey(Id)
-                .HasIndex(new EFIndexConfig("u => new { u.UserId, u.SystemId }",true, "[IsDeleted] = 0"))
+                .HasIndex(new EFIndexConfig("u => new { u.UserId, u.SystemId }",true, "[IsDeleted] = 0", EFIndexType.CombinePropIndex))
                 .Return(); ;
         }
     }

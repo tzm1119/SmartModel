@@ -4,6 +4,7 @@ using static AuthGen.MASAAuthModuleNameConst;
 using static AuthGen.MASAAuthEnumTypeNameConst;
 using static SmartModel.PropertyNameConst;
 using static SmartModel.PropertyDef;
+using static SmartModel.PropertyExistType ;
 
 namespace AuthGen
 {
@@ -14,11 +15,16 @@ namespace AuthGen
             SetName(RegisterField)
                 .SetModuleName(Sso)
                 .SetBaseClass_Entity_Int()
-                .AddProperty(Enum(RegisterFieldTypes, RegisterFieldType))
-                .AddProperty(Bool(Required))
-                .AddProperty(Int(CustomLoginId).IsOnlyDomainModel())
-                .AddProperty(Int(Sort))
-                .AddProperty(Bool(CannotUpdate).IsOnlyDto())
+                .AddProperty(Enum(RegisterFieldTypes, RegisterFieldType)
+                    .ExistIn(DomainModel,Dto))
+                .AddProperty(Bool(Required)
+                     .ExistIn(DomainModel,Dto))
+                .AddProperty(Int(CustomLoginId)
+                     .ExistIn(DomainModel))
+                .AddProperty(Int(Sort)
+                    .ExistIn(DomainModel,Dto))
+                .AddProperty(Bool(CannotUpdate)
+                    .ExistIn(Dto))
                 .EntityTypeConfiguration
                 .HasKey(Id)
                 .Return();

@@ -19,13 +19,19 @@ namespace AuthGen
         public MenuModel()
         {
             SetName(Menu)
-                 .SetModuleName(M_Permissions)
-               .AddProperty(Guid(Id))
-               .AddProperty(String_Name())
-               .AddProperty(String(Code))
-               .AddProperty(String(Icon))
-               .AddProperty(String(Url))
-               .AddProperty(List(Menu, Children))
+               .SetModuleName(M_Permissions)
+               .AddProperty(Guid(Id)
+                .ExistIn(Dto))
+               .AddProperty(String_Name()
+                 .ExistIn(Dto))
+               .AddProperty(String(Code)
+                 .ExistIn(Dto))
+               .AddProperty(String(Icon)
+                 .ExistIn(Dto))
+               .AddProperty(String(Url)
+                 .ExistIn(Dto))
+               .AddProperty(List(Menu, Children)
+                 .ExistIn(Dto))
             ;
         }
     }

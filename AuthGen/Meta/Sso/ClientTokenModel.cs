@@ -1,0 +1,51 @@
+﻿namespace AuthGen
+{
+    public class ClientTokenModel : MetaModelDef
+    {
+        public ClientTokenModel()
+        {
+            SetName(ClientToken)
+                .SetModuleName(Sso)
+                .SetDoNotGenDomainModel()
+                  .AddProperty(Bool(AllowOfflineAccess)
+                    .ExistIn(Dto))
+              .AddProperty(Int(IdentityTokenLifetime)
+                    .ExistIn(Dto))
+             .AddProperty(ListString(AllowTokenSigningAlgorithms)
+                     .ExistIn(Dto))
+              .AddProperty(ListSelectItem_String(AllowedIdentityTokenSigningAlgorithmsItems)
+                     .ExistIn(Dto))
+                    .AddProperty(Int(AccessTokenLifetime)
+                    .ExistIn(Dto))
+                     .AddProperty(Int(AccessTokenType)
+                    .ExistIn(Dto))
+                      .AddProperty(Int(AuthorizationCodeLifetime)
+                    .ExistIn(Dto))
+                       .AddProperty(Int(AbsoluteRefreshTokenLifetime)
+                    .ExistIn(Dto))
+                         .AddProperty(Bool(IncludeJwtId)
+                    .ExistIn(Dto))
+                            .AddProperty(Int(SlidingRefreshTokenLifetime)
+                    .ExistIn(Dto))
+                    .AddProperty(Int(RefreshTokenUsage)
+                    .ExistIn(Dto))
+                     .AddProperty(Int(RefreshTokenExpiration)
+                    .ExistIn(Dto))
+                     .AddProperty(Bool(UpdateAccessTokenClaimsOnRefresh)
+                    .ExistIn(Dto))
+                     .AddProperty(Bool(AlwaysSendClientClaims)
+                    .ExistIn(Dto))
+                      .AddProperty(String(PairWiseSubjectSalt)
+                    .ExistIn(Dto))
+                   .AddProperty(Bool(AllowAccessTokensViaBrowser)
+                    .ExistIn(Dto))
+                      .AddProperty(Bool(AlwaysIncludeUserClaimsInIdToken)
+                    .ExistIn(Dto))
+                     .AddProperty(List(ClientClaim, Claims)
+                    .ExistIn(Dto))
+               .AddProperty(NewProperty(ClientClaim, ClientClaimDto,DefaultValue_CtorNew)
+                    .ExistIn(Dto))
+                  ;
+        }
+    }
+}

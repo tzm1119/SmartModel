@@ -1,11 +1,4 @@
-﻿using SmartModel;
-using static AuthGen.MASAAuthTypeNameConst;
-using static AuthGen.MASAAuthModuleNameConst;
-using static AuthGen.MASAAuthEnumTypeNameConst;
-using static SmartModel.PropertyNameConst;
-using static SmartModel.PropertyDef;
-
-namespace AuthGen
+﻿namespace AuthGen
 {
     public class RolePermissionModel : MetaModelDef
     {
@@ -15,8 +8,10 @@ namespace AuthGen
                 .SetModuleName(M_Permissions)
                 .SetDoNotGenDto()
                 .SetBaseClassName(SubjectPermissionRelation)
-                .AddProperty(Guid(RoleId))
-                .AddProperty(NewProperty(Role, Role).SetNullable_NotNull())
+                .AddProperty(Guid(RoleId)
+                    .ExistIn(DomainModel))
+                .AddProperty(NewProperty(Role, Role).SetNullable_NotNull()
+                     .ExistIn(DomainModel))
             ;
         }
     }

@@ -91,6 +91,9 @@ namespace SmartModel
 
         public const string Code = "Code";
         public const string _Type = "Type";
+        public const string Expiration = "Expiration";
+        public const string Value = "Value";
+        public const string Key = "Key";
         public const string SystemId = "SystemId";
         public const string AppId = "AppId";
         public const string Icon = "Icon";
@@ -120,6 +123,8 @@ namespace SmartModel
         public const string Creator = "Creator";
         public const string Modifier = "Modifier";
         public const string Effect = "Effect";
+        public const string RoleIds = "RoleIds";
+        public const string ThirdPartyIdpAvatars = "ThirdPartyIdpAvatars";
 
 
         public const string ParentRoles = "ParentRoles";
@@ -137,6 +142,8 @@ namespace SmartModel
         
         public const string DepartmentId = "DepartmentId";
         public const string StaffId = "StaffId";
+        public const string TeamAdmin = "TeamAdmin";
+        public const string TeamMember = "TeamMember";
         public const string Level = "Level";
         public const string Sort = "Sort";
         public const string ChildPermissions = "ChildPermissions";
@@ -153,12 +160,52 @@ namespace SmartModel
         public const string ApiScopes = "ApiScopes";
         public const string UserClaims = "UserClaims";
         public const string Properties = "Properties";
+        public const string Property = "Property";
         public const string Secrets = "Secrets";
         public const string Required = "Required";
         public const string Emphasize = "Emphasize";
         public const string ClientType = "ClientType";
+        public const string RequireRequestObject = "RequireRequestObject";
+        public const string AllowedCorsOrigins = "AllowedCorsOrigins";
+        public const string AllowedCorsOrigin = "AllowedCorsOrigin";
+        public const string FrontChannelLogoutUri = "FrontChannelLogoutUri";
+        public const string FrontChannelLogoutSessionRequired = "FrontChannelLogoutSessionRequired";
+        public const string BackChannelLogoutUri = "BackChannelLogoutUri";
+        public const string BackChannelLogoutSessionRequired = "BackChannelLogoutSessionRequired";
+        public const string EnableLocalLogin = "EnableLocalLogin";
+        public const string IdentityProviderRestrictions = "IdentityProviderRestrictions";
+        public const string IdentityProviderRestriction = "IdentityProviderRestriction";
+        public const string UserSsoLifetime = "UserSsoLifetime";
+        public const string AllowOfflineAccess = "AllowOfflineAccess";
+        public const string IdentityTokenLifetime = "IdentityTokenLifetime";
+        public const string AllowedIdentityTokenSigningAlgorithms = "AllowedIdentityTokenSigningAlgorithms";
+        public const string AllowTokenSigningAlgorithms = "AllowTokenSigningAlgorithms";
+        public const string AllowedIdentityTokenSigningAlgorithmsItems = "AllowedIdentityTokenSigningAlgorithmsItems";
+        public const string AccessTokenLifetime = "AccessTokenLifetime";
+        public const string AccessTokenType = "AccessTokenType";
+        public const string AuthorizationCodeLifetime = "AuthorizationCodeLifetime";
+        public const string AbsoluteRefreshTokenLifetime = "AbsoluteRefreshTokenLifetime";
+        public const string IncludeJwtId = "IncludeJwtId";
+        public const string SlidingRefreshTokenLifetime = "SlidingRefreshTokenLifetime";
+        public const string RefreshTokenUsage = "RefreshTokenUsage";
+        public const string RefreshTokenExpiration = "RefreshTokenExpiration";
+        public const string UpdateAccessTokenClaimsOnRefresh = "UpdateAccessTokenClaimsOnRefresh";
+        public const string AlwaysSendClientClaims = "AlwaysSendClientClaims";
+        public const string PairWiseSubjectSalt = "PairWiseSubjectSalt";
+        public const string AllowAccessTokensViaBrowser = "AllowAccessTokensViaBrowser";
+        public const string Claims = "Claims";
+        public const string ClientClaimDto = "ClientClaimDto";
+        public const string UserCodeType = "UserCodeType";
+        public const string DeviceCodeLifetime = "DeviceCodeLifetime";
+        public const string _AllowedScopes = "_AllowedScopes";
+        public const string IdentityScopes = "IdentityScopes";
+        public const string AlwaysIncludeUserClaimsInIdToken = "AlwaysIncludeUserClaimsInIdToken";
+        public const string ClientSecrets = "ClientSecrets";
+        public const string AllowRememberConsent = "AllowRememberConsent";
+        public const string ConsentLifetime = "ConsentLifetime";
         public const string ClientId = "ClientId";
         public const string ClientName = "ClientName";
+        public const string GrantTypes = "GrantTypes";
         public const string AllowedGrantTypes = "AllowedGrantTypes";
         public const string RequirePkce = "RequirePkce";
         public const string RedirectUris = "RedirectUris";
@@ -166,6 +213,8 @@ namespace SmartModel
         public const string ClientUri = "ClientUri";
         public const string LogoUri = "LogoUri";
         public const string RequireConsent = "RequireConsent";
+        public const string RedirectUri = "RedirectUri";
+        public const string PostLogoutRedirectUri = "PostLogoutRedirectUri";
         public const string RequireClientSecret = "RequireClientSecret";
         public const string AllowedScopes = "AllowedScopes";
         public const string Title = "Title";
@@ -212,6 +261,12 @@ namespace SmartModel
         public const string CannotUpdate = "CannotUpdate";
         public const string MemberCount = "MemberCount";
         public const string AdminAvatar = "AdminAvatar";
+        public const string AdminStaffs = "AdminStaffs";
+        public const string AdminRoles = "AdminRoles";
+        public const string AdminPermissions = "AdminPermissions";
+        public const string MemberPermissions = "MemberPermissions";
+        public const string MemberStaffs = "MemberStaffs";
+        public const string MemberRoles = "MemberRoles";
 
 
 

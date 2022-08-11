@@ -1,10 +1,4 @@
-﻿using SmartModel;
-using static AuthGen.MASAAuthTypeNameConst;
-using static AuthGen.MASAAuthModuleNameConst;
-using static SmartModel.PropertyNameConst;
-using static SmartModel.PropertyDef;
-
-namespace AuthGen
+﻿namespace AuthGen
 {
     public class AddressValueModel : MetaModelDef
     {
@@ -13,10 +7,15 @@ namespace AuthGen
             SetName(AddressValue)
                 .SetModuleName(Subjects)
                 .SetBaseClass_ValueObject()
-                .AddProperty(String(Address))
-                .AddProperty(String(ProvinceCode))
-                .AddProperty(String(CityCode))
-                .AddProperty(String(DistrictCode));
+                .AddProperty(String(Address)
+                    .ExistIn(DomainModel, Dto))
+                .AddProperty(String(ProvinceCode)
+                     .ExistIn(DomainModel, Dto))
+                .AddProperty(String(CityCode)
+                     .ExistIn(DomainModel, Dto))
+                .AddProperty(String(DistrictCode)
+                     .ExistIn(DomainModel, Dto))
+                ;
         }
     }
 }

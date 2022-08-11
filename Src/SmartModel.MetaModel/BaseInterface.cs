@@ -14,6 +14,7 @@ namespace SmartModel
     public partial class Config
     {
         public static string Domain = "Domain";
+        public static string Application = "Application";
         public static string Infrastructure = "Infrastructure";
         public static string EntityConfigurations = "EntityConfigurations";
         public static string Repositories = "Repositories";
@@ -27,7 +28,8 @@ namespace SmartModel
 
         #region MASA Propject
         public static string ContractsDir = ""; 
-        public static string ServicesDir = ""; 
+        public static string ServicesDir = "";
+        public static string CallerDir = "";
         #endregion
     }
 

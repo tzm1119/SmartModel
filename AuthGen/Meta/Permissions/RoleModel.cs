@@ -1,11 +1,4 @@
-﻿using SmartModel;
-using static AuthGen.MASAAuthTypeNameConst;
-using static AuthGen.MASAAuthModuleNameConst;
-using static AuthGen.MASAAuthEnumTypeNameConst;
-using static SmartModel.PropertyNameConst;
-using static SmartModel.PropertyDef;
-
-namespace AuthGen
+﻿namespace AuthGen
 {
     public class RoleModel : MetaModelDef
     {
@@ -15,23 +8,65 @@ namespace AuthGen
                 .SetModuleName(M_Permissions)
                 .SetBaseClass_FullAggregateRoot_Guid_Guid()
                 .SetIRepository_Entity_Guid()
-                .AddProperty(Guid(Id).IsOnlyDto())
-                .AddProperty(String_Name())
-                .AddProperty(Int(Limit))
-                .AddProperty(String_Description())
-                .AddProperty(Bool(Enabled).IsOnlyDomainModel())
-                .AddProperty(Int(AvailableQuantity).IsOnlyDomainModel())
-                .AddProperty(IReadOnlyCollection(RolePermission, Permissions).IsOnlyDomainModel())
-                .AddProperty(IReadOnlyCollection(RoleRelation, ChildrenRoles).IsOnlyDomainModel())
-                .AddProperty(IReadOnlyCollection(RoleRelation, ParentRoles).IsOnlyDomainModel())
-                .AddProperty(IReadOnlyCollection(UserRole, Users).IsOnlyDomainModel())
-                .AddProperty(IReadOnlyCollection(TeamRole, Teams).IsOnlyDomainModel())
-                .AddProperty(NewProperty(User, CreateUser).Set_GetSetType(GetSetType.Get).IsOnlyDomainModel().IsNullable())
-                .AddProperty(NewProperty(User, ModifyUser).Set_GetSetType(GetSetType.Get).IsOnlyDomainModel().IsNullable())
-                .AddProperty(DateTime(CreationTime).IsOnlyDto())
-                .AddProperty(DateTime(ModificationTime).IsOnlyDto().IsNullable())
-                .AddProperty(String(Creator).IsOnlyDto())
-                .AddProperty(String(Modifier).IsOnlyDto())
+                .AddProperty(Guid(Id)
+                    .ExistIn(Dto, SelectDto, UpdateDto, RemoveDto))
+                .AddProperty(String_Name()
+                    .ExistIn(DomainModel, Dto, SelectDto, AddDto, UpdateDto))
+                .AddProperty(Int(Limit)
+                     .ExistIn(DomainModel, Dto, SelectDto, AddDto, UpdateDto))
+                .AddProperty(String_Description()
+                      .ExistIn(DomainModel, Dto, AddDto, UpdateDto))
+                .AddProperty(Bool(Enabled)
+                      .ExistIn(DomainModel, Dto, AddDto, UpdateDto))
+                .AddProperty(Int(AvailableQuantity)
+                    .ExistIn(DomainModel, SelectDto, DetailDto))
+                .AddProperty(IReadOnlyCollection(RolePermission, Permissions)
+                     .ExistIn(DomainModel))
+                 .AddProperty(List(SubjectPermissionRelation, Permissions)
+                     .ExistIn(DetailDto))
+                 .AddProperty(IReadOnlyCollection(SubjectPermissionRelation, Permissions)
+                     .ExistIn(AddDto, UpdateDto))
+                .AddProperty(IReadOnlyCollection(RoleRelation, ChildrenRoles)
+                     .ExistIn(DomainModel))
+                 .AddProperty(ListGuid(ChildrenRoles)
+                     .ExistIn(AddDto,DetailDto, UpdateDto))
+                .AddProperty(IReadOnlyCollection(RoleRelation, ParentRoles)
+                     .ExistIn(DomainModel))
+                 .AddProperty(ListGuid(ParentRoles)
+                     .ExistIn(DetailDto))
+                .AddProperty(IReadOnlyCollection(UserRole, Users)
+                     .ExistIn(DomainModel))
+                .AddProperty(List(UserSelect, Users)
+                     .ExistIn(DetailDto))
+                .AddProperty(IReadOnlyCollection(TeamRole, Teams)
+                     .ExistIn(DomainModel))
+                .AddProperty(ListGuid(Teams)
+                    .ExistIn(DetailDto))
+                .AddProperty(NewProperty(User, CreateUser).Set_GetSetType(GetSetType.Get).IsNullable()
+                     .ExistIn(DomainModel))
+                .AddProperty(NewProperty(User, ModifyUser).Set_GetSetType(GetSetType.Get).IsNullable()
+                     .ExistIn(DomainModel))
+                .AddProperty(DateTime(CreationTime)
+                      .ExistIn(Dto))
+                .AddProperty(DateTime(ModificationTime).IsNullable()
+                      .ExistIn(Dto))
+                .AddProperty(String(Creator)
+                      .ExistIn(Dto))
+                .AddProperty(String(Modifier)
+                      .ExistIn(Dto))
+                 .AddProperty(String(Search)
+                      .ExistIn(GetDto))
+                  .AddProperty(Bool(Enabled).IsNullable()
+                      .ExistIn(GetDto))
+                .SupportAdd()
+                .SupportGet()
+                .SupportRemove()
+                .SupportUpdate()
+                .SupportDetail()
+                .SetDetialDtoInheritDto()
+                .SupportSelect()
+
+
             ;
         }
     }

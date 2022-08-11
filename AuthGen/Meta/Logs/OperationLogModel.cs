@@ -1,4 +1,5 @@
-﻿
+﻿using static SmartModel.PropertyExistType;
+
 namespace AuthGen
 {
     public class OperationLogModel : MetaModelDef
@@ -9,12 +10,23 @@ namespace AuthGen
                 .SetModuleName(Logs)
                 .SetBaseClass_AggregateRoot_Guid()
                 .SetIRepository_Entity_Guid()
-                .AddProperty(Guid(Id).IsOnlyDto())
-                .AddProperty(Guid(Operator))
-                .AddProperty(String(OperatorName))
-                .AddProperty(Enum(OperationTypes, OperationType))
-                .AddProperty(DateTime(OperationTime))
-                .AddProperty(String(OperationDescription))
+                .AddProperty(Guid(Id)
+                    .ExistIn(Dto,RemoveDto))
+                .AddProperty(Guid(Operator)
+                    .ExistIn(DomainModel,Dto,AddDto))
+                .AddProperty(String(OperatorName)
+                    .ExistIn(DomainModel, Dto, AddDto))
+                .AddProperty(Enum(OperationTypes, OperationType)
+                     .ExistIn(DomainModel, Dto, AddDto))
+                .AddProperty(DateTime(OperationTime)
+                     .ExistIn(DomainModel, Dto, AddDto))
+                .AddProperty(String(OperationDescription)
+                     .ExistIn(DomainModel, Dto, AddDto))
+                .SupportGet()
+                .SupportDetail()
+                .SetDetialDtoInheritDto()
+                .SupportRemove()
+                .SupportAdd()
                 .EntityTypeConfiguration
                 .HasKey(Id)
                 .HasIndex(new EFIndexConfig(Operator))

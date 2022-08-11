@@ -14,9 +14,12 @@ namespace AuthGen
             SetName(AvatarValue)
               .SetModuleName(Subjects)
               .SetBaseClass_ValueObject()
-              .AddProperty(String(Url))
-              .AddProperty(String_Name())
-              .AddProperty(String(Color));
+              .AddProperty(String(Url)
+                 .ExistIn(DomainModel, Dto))
+              .AddProperty(String_Name()
+                 .ExistIn(DomainModel, Dto))
+              .AddProperty(String(Color)
+                 .ExistIn(DomainModel, Dto));
         }
     }
 }
